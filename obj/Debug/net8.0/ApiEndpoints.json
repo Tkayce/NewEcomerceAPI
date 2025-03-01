@@ -117,6 +117,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "ForgotPasswordController",
+    "Method": "ForgotPassword",
+    "RelativePath": "api/ForgotPassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "EcommerceNEWAPI.DTOs.ForgotPasswordDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "ECommerceAPI.Controller.OrderController",
     "Method": "UpdateOrder",
     "RelativePath": "api/Order/{orderId}",
@@ -193,7 +209,17 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[ECommerceAPI.Model.Product, EcommerceNEWAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "ECommerceAPI.Controller.ProductController",
@@ -241,8 +267,8 @@
         "IsRequired": true
       },
       {
-        "Name": "updatedProduct",
-        "Type": "ECommerceAPI.Model.Product",
+        "Name": "productDto",
+        "Type": "EcommerceNEWAPI.DTOs.ProductDto",
         "IsRequired": true
       }
     ],
@@ -265,6 +291,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "ResetPasswordController",
+    "Method": "ResetPassword",
+    "RelativePath": "api/ResetPassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "EcommerceNEWAPI.DTOs.ResetPasswordDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "ECommerceAPI.Controller.AppCustomerController",
     "Method": "Login",
     "RelativePath": "login",
@@ -273,14 +315,9 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "Email",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Password",
-        "Type": "System.String",
-        "IsRequired": false
+        "Name": "request",
+        "Type": "ECommerceAPI.DTOs.LoginDTO",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -367,19 +404,9 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "Name",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Email",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
-        "Name": "Password",
-        "Type": "System.String",
-        "IsRequired": false
+        "Name": "request",
+        "Type": "ECommerceAPI.DTOs.AppCustomerDTO",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

@@ -1,8 +1,5 @@
-﻿
-using ECommerceAPI.DTOs;
-using ECommerceAPI.Model;
+﻿using ECommerceAPI.Model;
 using Microsoft.EntityFrameworkCore;
-using static ECommerceAPI.Model.OrderProduct;
 
 public class ApplicationDbContext : DbContext
 {
@@ -16,6 +13,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<AppCustomer> AppCustomers { get; set; }
     public DbSet<Cart> Carts { get; set; }
     //public DbSet<CartItem> CartItems { get; set; }
+
     public DbSet<ECommerceAPI.Model.OrderProduct> OrderProduct { get; set; }
     public DbSet<CartItem> CartItems { get; set; }
 

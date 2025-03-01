@@ -1,4 +1,5 @@
 ﻿using ECommerceAPI.Model;
+using EcommerceNEWAPI.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -17,9 +18,15 @@ namespace ECommerceAPI.Controller
         }
         // ✅ 1. Get All Products
         [HttpGet]
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
             var products = await _context.Products.ToListAsync();
+
+            if (products == null || products.Count == 0)
+            {
+                return NotFound("No products found.");
+            }
+
             return Ok(products);
         }
 
@@ -49,18 +56,30 @@ namespace ECommerceAPI.Controller
 
         // ✅ 4. Update an Existing Product
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProduct(int id, [FromBody] Product updatedProduct)
+        public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductDto productDto)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
-                return NotFound(new { Message = "Product not found." });
+            if (id != productDto.Id)
+            {
+                return BadRequest("Product ID mismatch.");
+            }
 
-            product.Name = updatedProduct.Name;
-            product.Price = updatedProduct.Price;
-            product.Description = updatedProduct.Description;
+            var existingProduct = await _context.Products.FindAsync(id);
+            if (existingProduct == null)
+            {
+                return NotFound("Product not found.");
+            }
 
+            // Update properties
+            existingProduct.Name = productDto.Name;
+            existingProduct.Price = productDto.Price;
+            existingProduct.Description = productDto.Description;
+            existingProduct.Stock = productDto.Stock;
+            existingProduct.ImageUrl = productDto.ImageUrl; // ✅ Update image URL
+
+            _context.Entry(existingProduct).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            return Ok(new { Message = "Product updated successfully." });
+
+            return Ok(existingProduct);
         }
 
         // ✅ 5. Delete a Product

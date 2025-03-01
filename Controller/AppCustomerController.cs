@@ -2,6 +2,7 @@
 using ECommerceAPI.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace ECommerceAPI.Controller
 {
@@ -15,40 +16,76 @@ namespace ECommerceAPI.Controller
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(AppCustomerDTO request)
+        public async Task<IActionResult> Register([FromBody] AppCustomerDTO request)
         {
-            if (await _context.AppCustomers.AnyAsync(c => c.Email == request.Email))
+            if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
             {
-                return BadRequest("Email already exists.");
+                return BadRequest(new { message = "Email and password are required." });
             }
 
-            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password); // Hash the password
+            // Check if the email is already used
+            var existingUser = await _context.AppCustomers.FirstOrDefaultAsync(c => c.Email == request.Email);
+            if (existingUser != null)
+            {
+                return BadRequest(new { message = "Email already used for SignUp, kindly login or click Forgotten Password." });
+            }
 
-            var appCustomer = new AppCustomer
+            // Hash the password before saving
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
+
+            var newUser = new AppCustomer
             {
                 Name = request.Name,
                 Email = request.Email,
-                PasswordHash = hashedPassword
+                PasswordHash = hashedPassword // Ensure this matches the column in your DB
             };
 
-            _context.AppCustomers.Add(appCustomer);
+            _context.AppCustomers.Add(newUser);
             await _context.SaveChangesAsync();
-            return Ok("Registration successful.");
+
+            return Ok(new { message = "Registration successful! Please login." });
         }
 
         // User Login
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDTO request)
+        public async Task<IActionResult> Login([FromBody] LoginDTO request)
         {
-            var customer = await _context.AppCustomers.FirstOrDefaultAsync(c => c.Email == request.Email);
-            if (customer == null)
-                return BadRequest("User not found.");
+            if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
+            {
+                return BadRequest(new { message = "Email and password are required." });
+            }
 
-            if (!BCrypt.Net.BCrypt.Verify(request.Password, customer.PasswordHash)) // Verify the password
-                return BadRequest("Invalid password.");
+            var user = await _context.AppCustomers.FirstOrDefaultAsync(c => c.Email == request.Email);
+            if (user == null)
+            {
+                return BadRequest(new { message = "Invalid email or password." });
+            }
 
-            return Ok("Login successful.");
+            // Ensure the password column exists in AppCustomer
+            if (string.IsNullOrEmpty(user.PasswordHash))
+            {
+                return BadRequest(new { message = "User password not found." });
+            }
+
+            // Verify the hashed password
+            if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
+            {
+                return BadRequest(new { message = "Invalid email or password." });
+            }
+
+            // Return user details (without password)
+            return Ok(new
+            {
+                message = "Login successful",
+                user = new
+                {
+                    id = user.Id,
+                    name = user.Name,
+                    email = user.Email
+                }
+            });
         }
+
 
         // Get Customer Profile
         [HttpGet("profile/{id}")]
