@@ -10,7 +10,6 @@ C:\Users\USER\source\repos\EcommerceNEWAPI\EcommerceNEWAPI\bin\Debug\net8.0\apps
 C:\Users\USER\source\repos\EcommerceNEWAPI\EcommerceNEWAPI\bin\Debug\net8.0\appsettings.json
 C:\Users\USER\source\repos\EcommerceNEWAPI\EcommerceNEWAPI\bin\Debug\net8.0\package-lock.json
 C:\Users\USER\source\repos\EcommerceNEWAPI\EcommerceNEWAPI\bin\Debug\net8.0\package.json
-C:\Users\USER\source\repos\EcommerceNEWAPI\EcommerceNEWAPI\bin\Debug\net8.0\EcommerceNEWAPI.staticwebassets.runtime.json
 C:\Users\USER\source\repos\EcommerceNEWAPI\EcommerceNEWAPI\bin\Debug\net8.0\EcommerceNEWAPI.exe
 C:\Users\USER\source\repos\EcommerceNEWAPI\EcommerceNEWAPI\bin\Debug\net8.0\EcommerceNEWAPI.deps.json
 C:\Users\USER\source\repos\EcommerceNEWAPI\EcommerceNEWAPI\bin\Debug\net8.0\EcommerceNEWAPI.runtimeconfig.json

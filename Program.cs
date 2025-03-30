@@ -39,6 +39,8 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 var smtpSettings = builder.Configuration.GetSection("SmtpSettings");
 builder.Services.Configure<SmtpSettings>(smtpSettings);
 
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
 
 var app = builder.Build();
 

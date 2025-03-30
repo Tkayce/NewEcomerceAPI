@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EcommerceNEWAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250228152117_initialDBSetup")]
-    partial class initialDBSetup
+    [Migration("20250329225159_CategoryWithWithout Category")]
+    partial class CategoryWithWithoutCategory
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -107,6 +107,23 @@ namespace EcommerceNEWAPI.Migrations
                     b.ToTable("CartItems");
                 });
 
+            modelBuilder.Entity("ECommerceAPI.Model.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("ECommerceAPI.Model.Customer", b =>
                 {
                     b.Property<int>("Id")
@@ -193,6 +210,9 @@ namespace EcommerceNEWAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -212,6 +232,8 @@ namespace EcommerceNEWAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
                 });
@@ -265,9 +287,21 @@ namespace EcommerceNEWAPI.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("ECommerceAPI.Model.Product", b =>
+                {
+                    b.HasOne("ECommerceAPI.Model.Category", null)
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId");
+                });
+
             modelBuilder.Entity("ECommerceAPI.Model.Cart", b =>
                 {
                     b.Navigation("CartItems");
+                });
+
+            modelBuilder.Entity("ECommerceAPI.Model.Category", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("ECommerceAPI.Model.Order", b =>

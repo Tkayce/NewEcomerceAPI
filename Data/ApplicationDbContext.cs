@@ -17,7 +17,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<ECommerceAPI.Model.OrderProduct> OrderProduct { get; set; }
     public DbSet<CartItem> CartItems { get; set; }
 
-
+    public DbSet<Category> Categories { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
